@@ -1,0 +1,4 @@
+LIBRARY MiniShotMenu
+EXPORTS
+    DllGetClassObject PRIVATE
+    DllCanUnloadNow PRIVATE

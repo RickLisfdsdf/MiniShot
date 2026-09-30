@@ -1,0 +1,11 @@
+# 编译产物（发布在 Releases）
+*.exe
+*.dll
+*.obj
+*.exp
+*.lib
+*.zip
+dist/
+
+# Add-AppxPackage 注册时生成
+microsoft.system.package.metadata/
