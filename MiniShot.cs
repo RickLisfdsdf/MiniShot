@@ -1,5 +1,5 @@
 // MiniShot - 极小截图工具
-// PrtScn: 冻结全屏 -> 拖框选区 -> 复制到剪贴板并存 PNG
+// PrtScn: 冻结全屏 -> 拖框选区 -> 只复制到剪贴板，不存文件
 // 按键被低级钩子吞掉，前台程序收不到，下拉菜单不会收起
 using System;
 using System.Diagnostics;
@@ -65,7 +65,6 @@ class TrayApp : ApplicationContext
     int hotKey; // 自定义截图键，PrtScn 始终可用
 
     const string MenuKey = @"Software\Classes\Directory\Background\shell\MiniShotPaste";
-    public static string SaveDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
     public static string NewFileName(string dir)
     {
@@ -80,10 +79,7 @@ class TrayApp : ApplicationContext
     {
         ui.CreateControl();
         using (var k = Registry.CurrentUser.OpenSubKey(CfgKey))
-        {
             hotKey = k == null ? 0 : (int)k.GetValue("HotKey", 0);
-            if (k != null) SaveDir = (string)k.GetValue("SaveDir", SaveDir);
-        }
         proc = HookCallback;
         hook = SetWindowsHookEx(13, proc, GetModuleHandle(null), 0);
 
@@ -98,19 +94,6 @@ class TrayApp : ApplicationContext
             tray.ShowBalloonTip(5000, "设置截图键", "现在按一下你想用的键（如 Fn+F1）", ToolTipIcon.Info);
         };
         menu.Items.Add(keyItem);
-        var dirItem = new ToolStripMenuItem("保存位置: " + SaveDir);
-        dirItem.Click += (s, e) =>
-        {
-            using (var dlg = new FolderBrowserDialog { SelectedPath = SaveDir, Description = "截图保存到哪个文件夹" })
-            {
-                if (dlg.ShowDialog() != DialogResult.OK) return;
-                SaveDir = dlg.SelectedPath;
-                using (var k = Registry.CurrentUser.CreateSubKey(CfgKey)) k.SetValue("SaveDir", SaveDir);
-                dirItem.Text = "保存位置: " + SaveDir;
-            }
-        };
-        menu.Items.Add(dirItem);
-        menu.Items.Add("打开截图文件夹", null, (s, e) => { Directory.CreateDirectory(SaveDir); Process.Start(SaveDir); });
         var ctx = new ToolStripMenuItem("右键菜单「粘贴截图」") { Checked = HasPasteMenu() };
         ctx.Click += (s, e) => { SetPasteMenu(!ctx.Checked); ctx.Checked = HasPasteMenu(); };
         menu.Items.Add(ctx);
@@ -420,7 +403,6 @@ class SelectForm : Form
                 foreach (var b in boxes)
                     g.DrawRectangle(red, b.X - sel.X, b.Y - sel.Y, b.Width, b.Height);
             Clipboard.SetImage(crop);
-            crop.Save(TrayApp.NewFileName(TrayApp.SaveDir), ImageFormat.Png);
         }
         Close();
     }

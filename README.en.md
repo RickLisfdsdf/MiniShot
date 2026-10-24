@@ -40,14 +40,14 @@ Many apps (especially Delphi/VCL, industrial-control and CAD software) close the
 |---|---|
 | 📌 **Captures dropdown menus** | The capture key is intercepted at the system level; the foreground app never sees it and keeps focus |
 | ✂️ **Select + red boxes** | Drag to select on the frozen screen, then drag inside the selection to draw red rectangles (multiple, with undo) |
-| 📋 **Auto save + copy** | Copied to the clipboard and saved as a PNG (Desktop by default, configurable) |
+| 📋 **Clipboard only** | Copied to the clipboard, no file is written; right-click "Paste screenshot" in a folder when you need a file |
 | ⌨️ **Custom capture key** | PrtSc always works; bind any additional single key, e.g. a laptop's Fn+F1 |
 | ⏱️ **Delayed capture** | 3 s / 5 s from the tray menu |
 | 🖱️ **"Paste screenshot" in Explorer** | Right-click an empty area of any folder or the desktop to save the clipboard image as PNG; can go into the **Windows 11 top-level menu** |
 | 🪶 **Tiny** | 32 KB exe, ~4 MB RAM when idle, no install, no runtime to download (uses the built-in .NET Framework 4) |
 | 🖥️ **High DPI** | 150% / 200% scaling and multiple monitors, captured at physical resolution |
 
-| Result (saved and copied automatically) |
+| Result (copied to the clipboard) |
 |---|
 | ![Result](docs/result.png) |
 
@@ -55,7 +55,7 @@ Many apps (especially Delphi/VCL, industrial-control and CAD software) close the
 
 1. Download the zip from [Releases](https://github.com/RickLisfdsdf/MiniShot/releases/latest) and extract it to a **permanent folder** (e.g. `D:\Tools\MiniShot`)
 2. Run `MiniShot.exe` — an icon appears in the tray
-3. Press **PrtSc**: drag to select → drag inside to draw red boxes → **Enter** or double-click to save
+3. Press **PrtSc**: drag to select → drag inside to draw red boxes → **Enter** or double-click to finish
 
 | Action | Key |
 |---|---|
@@ -63,11 +63,11 @@ Many apps (especially Delphi/VCL, industrial-control and CAD software) close the
 | Full screen | Press Enter without selecting |
 | Draw red box | Drag inside the selection |
 | Undo box | Ctrl+Z / Undo button |
-| Save | Enter / double-click / Done button |
+| Finish | Enter / double-click / Done button |
 | Reselect | Press the mouse outside the selection |
 | Cancel | Esc / right-click |
 
-Right-click the tray icon to set the capture key, save folder, autostart and the classic "Paste screenshot" context-menu entry.
+Right-click the tray icon to set the capture key, autostart and the classic "Paste screenshot" context-menu entry.
 
 ### Optional: "Paste screenshot" in the Windows 11 top-level context menu
 
@@ -89,7 +89,7 @@ PrtSc pressed
    │
    ├─ CopyFromScreen grabs the whole virtual screen (no window shown yet)
    │
-   └─ Full-screen topmost window shows the frozen image → select → red boxes → save
+   └─ Full-screen topmost window shows the frozen image → select → red boxes → copy to clipboard
 ```
 
 - **Why single keys only:** modifier keys like Ctrl/Alt reach the foreground app the moment they are pressed. A single key (or Fn+key on laptops — Fn is handled by keyboard firmware) can be fully intercepted.
